@@ -1,7 +1,7 @@
 import express from 'express';
 import { authController} from '../controllers/authController';
 import { validateRequest } from '../middleware/validateRequest';
-import { inviteValidationSchema, loginValidationSchema } from '../validations/auth.validation';
+import { inviteValidationSchema, loginValidationSchema, registerViaInviteValidationSchema } from '../validations/auth.validation';
 import { authorize, protect } from '../middleware/auth';
 
 
@@ -11,6 +11,9 @@ router.post('/login', validateRequest(loginValidationSchema), authController.log
 
 
 router.post('/invite', protect, authorize('ADMIN'), validateRequest(inviteValidationSchema), authController.inviteUser);
+
+router.post('/register-via-invite', validateRequest(registerViaInviteValidationSchema), authController.registerViaInvite);
+
 
 
 export default router;

@@ -44,7 +44,32 @@ const inviteUser = catchAsync(async (req: AuthRequest, res: Response, next: Next
 
 
 
+// register-via-invite
+const registerViaInvite = catchAsync(async (req: Request, res: Response, _next: NextFunction) => {
+    const { token, name, password } = req.body;
+    const { refreshToken, accessToken, ...user } = await AuthService.registerViaInviteService(token, name, password, req);
+
+    res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 30 * 24 * 60 * 60 * 1000, 
+    });
+
+    sendResponse(res, {
+        statusCode: 201,
+        success: true,
+        message: 'Registration successful',
+        data: { user, accessToken },
+    });
+});
+
+
+
+
+
 export const authController = {
     login,
     inviteUser,
+    registerViaInvite,
 }

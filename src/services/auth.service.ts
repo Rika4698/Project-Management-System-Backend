@@ -46,7 +46,7 @@ const inviteUserService = async (email: string, role: string, adminId: string, r
     }
 
     const token = crypto.randomBytes(20).toString('hex');
-    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); 
 
     await Invite.create({
         email,
