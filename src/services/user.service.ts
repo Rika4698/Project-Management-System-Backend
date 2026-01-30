@@ -1,4 +1,5 @@
 import User from '../models/User';
+import AppError from '../utils/AppError';
 
 
 
@@ -22,8 +23,25 @@ const getUsersService = async (page = 1, limit = 10) => {
 };
 
 
+
+ const updateUserRoleService = async (id: string, role: string) => {
+    const user = await User.findById(id);
+
+    if (!user) {
+        throw new AppError(404, 'User not found');
+    }
+
+    user.role = role as any;
+    await user.save();
+
+    return user;
+};
+
+
+
 export const userService = {
           getUsersService,
+          updateUserRoleService
 };
 
 

@@ -45,7 +45,7 @@ const inviteUser = catchAsync(async (req: AuthRequest, res: Response, next: Next
 
 
 // register-via-invite
-const registerViaInvite = catchAsync(async (req: Request, res: Response, _next: NextFunction) => {
+const registerViaInvite = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const { token, name, password } = req.body;
     const { refreshToken, accessToken, ...user } = await AuthService.registerViaInviteService(token, name, password, req);
 
