@@ -7,7 +7,7 @@ const UserSchema : Schema = new Schema(
     {
         name:{ type:String, required: true},
         email:{type:String, required: true, unique:true},
-        password: {type:String, select:false},
+        password: {type:String, required: true, select:false},
         role:{type:String, enum:Object.values(UserRole), default:UserRole.STAFF},
         status:{type:String, enum:Object.values(UserStatus), default:UserStatus.ACTIVE},
         invitedAt:{type:Date},

@@ -1,4 +1,4 @@
-
+import { Document } from 'mongoose';
 
 export enum UserRole {
     ADMIN = 'ADMIN',
@@ -13,6 +13,7 @@ export enum UserStatus {
 
 
 export interface IUser extends Document {
+    
     name: string;
     email: string;
     password?: string;
