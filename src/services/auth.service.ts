@@ -25,7 +25,7 @@ import Invite from "../models/Invite";
     const accessToken = generateToken(user._id.toString());
     const refreshToken = generateRefreshToken(user._id.toString());
 
-    // await createAuditLog(user._id.toString(), AuditAction.LOGIN, `User logged in from IP: ${req?.ip}`, req);
+    await createAuditLog(user._id.toString(), AuditAction.LOGIN, `User logged in from IP: ${req?.ip}`, req);
 
     return{
       _id:user._id,
@@ -72,7 +72,7 @@ const inviteUserService = async (email: string, role: UserRole, adminId: string,
 
     const inviteLink = `${process.env.FRONTEND_URL}/register?token=${token}`;
 
-    // await createAuditLog(adminId, AuditAction.INVITE_USER, `Invited user ${email} with role ${role}. Link: ${inviteLink}`, req);
+    await createAuditLog(adminId, AuditAction.INVITE_USER, `Invited user ${email} with role ${role}. Link: ${inviteLink}`, req);
 
     return {
         inviteToken: token,
@@ -108,7 +108,7 @@ const inviteUserService = async (email: string, role: UserRole, adminId: string,
     const accessToken = generateToken(user._id.toString());
     const refreshToken = generateRefreshToken(user._id.toString());
 
-    // await createAuditLog(user._id.toString(), AuditAction.REGISTER_VIA_INVITE, 'User registered via invite', req);
+    await createAuditLog(user._id.toString(), AuditAction.REGISTER_VIA_INVITE, 'User registered via invite', req);
 
     return {
         _id: user._id,

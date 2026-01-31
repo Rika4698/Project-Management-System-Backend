@@ -3,6 +3,8 @@ import { Request, Response, NextFunction } from 'express';
 import sendResponse from '../utils/sendResponse';
 import { userService } from "../services/user.service";
 import { AuthRequest } from "../middleware/auth";
+import { createAuditLog } from "../utils/audit";
+import { AuditAction } from "../models/AuditLog";
 
 
 
@@ -29,7 +31,7 @@ const updateUserRole = catchAsync(async (req: AuthRequest, res: Response, next: 
     const { role } = req.body;
     const user = await userService.updateUserRoleService(req.params.id, role);
 
-    // await createAuditLog(req.user!._id.toString(), AuditAction.UPDATE_USER_ROLE, `Updated user ${req.params.id} role to ${role}`, req);
+    await createAuditLog(req.user!._id.toString(), AuditAction.UPDATE_USER_ROLE, `Updated user ${req.params.id} role to ${role}`, req);
 
     sendResponse(res, {
         statusCode: 200,
@@ -42,11 +44,11 @@ const updateUserRole = catchAsync(async (req: AuthRequest, res: Response, next: 
 
 
 // update status
-export const updateUserStatus = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+export const updateUserStatus = catchAsync(async (req: AuthRequest, res: Response, next: NextFunction) => {
     const { status } = req.body;
     const user = await userService.updateUserStatusService(req.params.id, status);
 
-    // await createAuditLog(req.user!._id.toString(), AuditAction.UPDATE_USER_STATUS, `Updated user ${req.params.id} status to ${status}`, req);
+    await createAuditLog(req.user!._id.toString(), AuditAction.UPDATE_USER_STATUS, `Updated user ${req.params.id} status to ${status}`, req);
 
     sendResponse(res, {
         statusCode: 200,

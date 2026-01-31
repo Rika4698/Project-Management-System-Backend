@@ -14,4 +14,6 @@ router.get('/', projectController.getProjects);
 
 router.patch('/:id', authorize('ADMIN'), validateRequest(updateProjectValidationSchema), projectController.updateProject);
 
+router.delete('/:id', authorize('ADMIN'), projectController.deleteProject);
+
 export default router;

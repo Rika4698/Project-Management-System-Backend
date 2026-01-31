@@ -1,3 +1,4 @@
+import { ProjectStatus } from "../interfaces/project.interface";
 import Project from "../models/Project";
 import AppError from "../utils/AppError";
 
@@ -32,10 +33,24 @@ const updateProjectService = async (id: string, data: any) => {
     return project;
 };
 
+ const deleteProjectService = async (id: string) => {
+    const project = await Project.findById(id);
+
+    if (!project) {
+        throw new AppError(404, 'Project not found');
+    }
+
+    project.isDeleted = true;
+    project.status = ProjectStatus.DELETED;
+    await project.save();
+
+    return { message: 'Project soft deleted' };
+};
 
 export const projectService = {
     createProjectService,
     getProjectsService,
     updateProjectService,
+    deleteProjectService
 
 }
