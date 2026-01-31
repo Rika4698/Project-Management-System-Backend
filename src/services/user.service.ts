@@ -3,32 +3,42 @@ import AppError from '../utils/AppError';
 
 
 
-const getUsersService = async (page = 1, limit = 10, search = '') => {
-    const skip = (page - 1) * limit;
+const getUsersService = async (
+  page = 1,
+  limit = 10,
+  search = ''
+) => {
+  const skip = (page - 1) * limit;
 
-    const query: any = {};
-    if (search) {
-        query.$or = [
-            { name: { $regex: search, $options: 'i' } },
-            { email: { $regex: search, $options: 'i' } },
-        ];
-    }
+  const query: any = {};
 
-    const [users, total] = await Promise.all([
-        User.find(query).sort('-createdAt').skip(skip).limit(limit),
-        User.countDocuments(query),
-    ]);
+  if (search) {
+    query.$or = [
+      { name: { $regex: search, $options: 'i' } },
+      { email: { $regex: search, $options: 'i' } },
+    ];
+  }
 
-    return {
-        users,
-        meta: {
-            total,
-            page,
-            limit,
-            totalPages: Math.ceil(total / limit),
-        },
-    };
+  const [users, total] = await Promise.all([
+    User.find(query)
+      .sort('-createdAt')
+      .skip(skip)
+      .limit(limit),
+    User.countDocuments(query),
+  ]);
+
+  return {
+    users,
+    meta: {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    },
+  };
 };
+
+
 
 
  const updateUserRoleService = async (id: string, role: string) => {

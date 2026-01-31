@@ -99,6 +99,9 @@ To get the project running locally, follow these steps:
 
 ---
 
+
+
+
 ### **🧪 API Testing**
 
 You can use **Postman** or any other API client to test the endpoints. Remember to:
@@ -208,7 +211,13 @@ Body:
     }
 }
 ```
+
+
 <br/>
+
+
+
+
 
 ## 👤 Author & Contact
 
