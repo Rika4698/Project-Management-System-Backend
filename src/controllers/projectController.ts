@@ -24,8 +24,9 @@ import { AuditAction } from "../models/AuditLog";
 
 
 // get all projects
-const getProjects = catchAsync(async (req: AuthRequest, res: Response, next: NextFunction) => {
-    const projects = await projectService.getProjectsService(req.user!.role);
+const getProjects = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+    const search = (req.query.search as string) || '';
+    const projects = await projectService.getProjectsService(req.user!.role, search);
 
     sendResponse(res, {
         statusCode: 200,

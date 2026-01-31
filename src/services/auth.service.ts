@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import AppError from "../utils/AppError";
 import { UserRole, UserStatus } from "../interfaces/user.interface";
-import { generateRefreshToken, generateToken } from "../utils/token.utils";
+import { generateRefreshToken, generateToken, verifyToken } from "../utils/token.utils";
 import { AuditAction } from "../models/AuditLog";
 import { createAuditLog } from "../utils/audit";
 import Invite from "../models/Invite";
@@ -70,7 +70,7 @@ const inviteUserService = async (email: string, role: UserRole, adminId: string,
         expiresAt,
     });
 
-    const inviteLink = `${process.env.FRONTEND_URL}/register?token=${token}`;
+    const inviteLink = `${process.env.FRONTEND_URL || "https://project-management-system-frontend-five.vercel.app"}/register?token=${token}`;
 
     await createAuditLog(adminId, AuditAction.INVITE_USER, `Invited user ${email} with role ${role}. Link: ${inviteLink}`, req);
 
@@ -121,9 +121,26 @@ const inviteUserService = async (email: string, role: UserRole, adminId: string,
 };
 
 
+const refreshTokenService = async (token: string) => {
+    try {
+        const decoded: any = verifyToken(token, (process.env.JWT_REFRESH_SECRET as string) || 'refresh_secret');
+        const user = await User.findById(decoded.id);
+
+        if (!user || user.status === UserStatus.INACTIVE) {
+            throw new AppError(401, 'Invalid refresh token or user deactivated');
+        }
+
+        const accessToken = generateToken(user._id.toString());
+        return { accessToken };
+    } catch {
+        throw new AppError(401, 'Invalid or expired refresh token');
+    }
+};
+
 
 export const AuthService = {
     loginService,
     inviteUserService,
-    registerViaInviteService
+    registerViaInviteService,
+    refreshTokenService
 };

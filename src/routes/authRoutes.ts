@@ -13,6 +13,7 @@ router.post('/login', validateRequest(loginValidationSchema), authController.log
 router.post('/invite', protect, authorize('ADMIN'), validateRequest(inviteValidationSchema), authController.inviteUser);
 
 router.post('/register-via-invite', validateRequest(registerViaInviteValidationSchema), authController.registerViaInvite);
+router.post('/refresh-token', authController.refreshToken);
 
 
 

@@ -64,7 +64,18 @@ const registerViaInvite = catchAsync(async (req: Request, res: Response, next: N
     });
 });
 
+// refresh-token
+const refreshToken = catchAsync(async (req: Request, res: Response, _next: NextFunction) => {
+    const token = req.cookies?.refreshToken;
+    const result = await AuthService.refreshTokenService(token);
 
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Token refreshed successfully',
+        data: result,
+    });
+})
 
 
 
@@ -72,4 +83,5 @@ export const authController = {
     login,
     inviteUser,
     registerViaInvite,
+    refreshToken,
 }

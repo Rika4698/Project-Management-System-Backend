@@ -14,8 +14,13 @@ import AppError from "../utils/AppError";
 };
 
 
- const getProjectsService = async (userRole: string) => {
-    const query = userRole === 'ADMIN' ? {} : { isDeleted: false };
+  const getProjectsService = async (userRole: string, search = '') => {
+    const query: any = userRole === 'ADMIN' ? {} : { isDeleted: false };
+
+    if (search) {
+        query.name = { $regex: search, $options: 'i' };
+    }
+
     return await Project.find(query).populate('createdBy', 'name email');
 };
 
