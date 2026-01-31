@@ -21,7 +21,20 @@ import sendResponse from "../utils/sendResponse";
 });
 
 
+// get all projects
+const getProjects = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+    const projects = await projectService.getProjectsService(req.user!.role);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Projects retrieved successfully',
+        data: projects,
+    });
+});
+
 
 export const projectController  = {
-    createProject
+    createProject,
+    getProjects
 }

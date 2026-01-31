@@ -2,7 +2,7 @@ import User from "../models/User";
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import AppError from "../utils/AppError";
-import { UserStatus } from "../interfaces/user.interface";
+import { UserRole, UserStatus } from "../interfaces/user.interface";
 import { generateRefreshToken, generateToken } from "../utils/token.utils";
 import { AuditAction } from "../models/AuditLog";
 import { createAuditLog } from "../utils/audit";
@@ -39,11 +39,26 @@ import Invite from "../models/Invite";
 
 
 
-const inviteUserService = async (email: string, role: string, adminId: string, req?: any) => {
+const inviteUserService = async (email: string, role: UserRole, adminId: string, req?: any) => {
     const userExists = await User.findOne({ email });
     if (userExists) {
         throw new AppError(400, 'User already exists');
     }
+
+
+     const activeInvite = await Invite.findOne({
+    email,
+    acceptedAt: null,
+    expiresAt: { $gt: new Date() },
+  });
+
+  if (activeInvite) {
+    throw new AppError(400, 'Active invite already exists');
+  }
+
+  if (!Object.values(UserRole).includes(role)) {
+    throw new AppError(400, 'Invalid role');
+  }
 
     const token = crypto.randomBytes(20).toString('hex');
     const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); 

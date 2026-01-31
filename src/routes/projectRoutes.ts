@@ -10,5 +10,7 @@ router.use(protect);
 
 router.post('/', validateRequest(createProjectValidationSchema), projectController.createProject);
 
+router.get('/', projectController.getProjects);
+
 
 export default router;
