@@ -7,7 +7,7 @@ import { errorHandler } from './middleware/ErrorHandler';
 import cookieParser from 'cookie-parser';
 import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
-
+import projectRoutes from './routes/projectRoutes';
 
 dotenv.config();
 
@@ -25,6 +25,7 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/projects', projectRoutes);
 
 
 

@@ -1,0 +1,27 @@
+import { AuthRequest } from "../middleware/auth";
+import { projectService } from "../services/project.service";
+import catchAsync from "../utils/catchAsync";
+import { Response, NextFunction } from 'express';
+import sendResponse from "../utils/sendResponse";
+
+
+
+// create projects
+ const createProject = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+    const project = await projectService.createProjectService(req.body, req.user!._id.toString());
+
+    // await createAuditLog(req.user!._id.toString(), AuditAction.CREATE_PROJECT, `Created project: ${project.name}`, req);
+
+    sendResponse(res, {
+        statusCode: 201,
+        success: true,
+        message: 'Project created successfully',
+        data: project,
+    });
+});
+
+
+
+export const projectController  = {
+    createProject
+}
