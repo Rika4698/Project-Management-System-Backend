@@ -6,3 +6,13 @@ export const createProjectValidationSchema = z.object({
         description: z.string().optional(),
     }),
 });
+
+
+
+export const updateProjectValidationSchema = z.object({
+    body: z.object({
+        name: z.string().min(3, 'Project name must be at least 5 characters long').optional(),
+        description: z.string().optional(),
+        status: z.enum(['ACTIVE', 'ARCHIVED', 'DELETED']).optional(),
+    }),
+});

@@ -1,7 +1,7 @@
 import express from 'express';
-import { protect} from '../middleware/auth';
+import { authorize, protect} from '../middleware/auth';
 import { validateRequest } from '../middleware/validateRequest';
-import { createProjectValidationSchema } from '../validations/project.validation';
+import { createProjectValidationSchema, updateProjectValidationSchema } from '../validations/project.validation';
 import { projectController } from '../controllers/projectController';
 
 const router = express.Router();
@@ -12,5 +12,6 @@ router.post('/', validateRequest(createProjectValidationSchema), projectControll
 
 router.get('/', projectController.getProjects);
 
+router.patch('/:id', authorize('ADMIN'), validateRequest(updateProjectValidationSchema), projectController.updateProject);
 
 export default router;

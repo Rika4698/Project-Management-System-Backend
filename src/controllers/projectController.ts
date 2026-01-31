@@ -33,8 +33,24 @@ const getProjects = catchAsync(async (req: AuthRequest, res: Response, _next: Ne
     });
 });
 
+// update projects (only admin)
+export const updateProject = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+    const project = await projectService.updateProjectService(req.params.id, req.body);
+
+    // await createAuditLog(req.user!._id.toString(), AuditAction.UPDATE_PROJECT, `Updated project: ${req.params.id}`, req);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Project updated successfully',
+        data: project,
+    });
+});
+
+
 
 export const projectController  = {
     createProject,
-    getProjects
+    getProjects,
+    updateProject,
 }
