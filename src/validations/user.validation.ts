@@ -7,3 +7,12 @@ export const updateUserRoleValidationSchema = z.object({
         }),
     }),
 });
+
+
+export const updateUserStatusValidationSchema = z.object({
+    body: z.object({
+        status: z.enum(['ACTIVE', 'INACTIVE'], {
+            message: "Status must be 'ACTIVE' or 'INACTIVE'",
+        }),
+    }),
+});

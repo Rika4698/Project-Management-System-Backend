@@ -38,10 +38,23 @@ const getUsersService = async (page = 1, limit = 10) => {
 };
 
 
+const updateUserStatusService = async (id: string, status: string) => {
+    const user = await User.findById(id);
+
+    if (!user) {
+        throw new AppError(404, 'User not found');
+    }
+
+    user.status = status as any;
+    await user.save();
+
+    return user;
+};
 
 export const userService = {
           getUsersService,
-          updateUserRoleService
+          updateUserRoleService,
+          updateUserStatusService,
 };
 
 

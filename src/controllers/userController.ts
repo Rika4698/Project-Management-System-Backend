@@ -40,7 +40,26 @@ const updateUserRole = catchAsync(async (req: AuthRequest, res: Response, next: 
 });
 
 
+
+// update status
+export const updateUserStatus = catchAsync(async (req: AuthRequest, res: Response, _next: NextFunction) => {
+    const { status } = req.body;
+    const user = await userService.updateUserStatusService(req.params.id, status);
+
+    // await createAuditLog(req.user!._id.toString(), AuditAction.UPDATE_USER_STATUS, `Updated user ${req.params.id} status to ${status}`, req);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'User status updated successfully',
+        data: user,
+    });
+});
+
+
+
 export const userController = {
     getUsers,
     updateUserRole,
+    updateUserStatus,
 };
